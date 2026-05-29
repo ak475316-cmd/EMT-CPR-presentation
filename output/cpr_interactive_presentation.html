@@ -1,0 +1,1039 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CPR 宣導互動簡報</title>
+  <style>
+    :root {
+      --bg: #f7f9fb;
+      --ink: #17202a;
+      --muted: #5c6873;
+      --line: #d9e1e8;
+      --red: #d64045;
+      --blue: #1769aa;
+      --green: #1f8a5b;
+      --yellow: #f4b942;
+      --white: #fff;
+      --shadow: 0 18px 45px rgba(23, 32, 42, .12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Microsoft JhengHei", "Noto Sans TC", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+
+    body {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(280px, 520px) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(10px);
+      z-index: 5;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .heart {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      background: var(--red);
+      font-weight: 900;
+    }
+
+    .live-link {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      min-width: 0;
+    }
+
+    .live-link input {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: var(--ink);
+      background: #fbfdff;
+    }
+
+    .icon-button, .nav-button, .answer, .pill, .tally-button {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    .icon-button {
+      width: 42px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .icon-button:hover, .nav-button:hover, .answer:hover, .pill:hover, .tally-button:hover {
+      transform: translateY(-1px);
+      border-color: #99b7d5;
+    }
+
+    .progress {
+      height: 5px;
+      background: #e6edf3;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--red), var(--blue));
+      transition: width .25s ease;
+    }
+
+    main {
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      min-height: 0;
+    }
+
+    .stage {
+      width: min(100%, 1360px);
+      aspect-ratio: 16 / 9;
+      max-height: calc(100vh - 124px);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+      padding: clamp(22px, 3vw, 46px);
+    }
+
+    .slide.active {
+      display: grid;
+    }
+
+    .slide.two-col {
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+    }
+
+    .slide.three-row {
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .kicker {
+      color: var(--red);
+      font-weight: 800;
+      font-size: clamp(16px, 1.6vw, 22px);
+      margin: 0 0 8px;
+    }
+
+    h1, h2, h3, p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 920px;
+      font-size: clamp(42px, 6vw, 82px);
+      line-height: 1.05;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: clamp(30px, 4vw, 56px);
+      line-height: 1.08;
+      margin-bottom: 14px;
+    }
+
+    h3 {
+      font-size: clamp(20px, 2vw, 28px);
+      margin-bottom: 10px;
+    }
+
+    p, li {
+      font-size: clamp(18px, 1.55vw, 25px);
+      line-height: 1.48;
+    }
+
+    .lead {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: clamp(21px, 2.1vw, 31px);
+    }
+
+    .panel, .tool {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+      padding: clamp(16px, 2vw, 26px);
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(214, 64, 69, .14), transparent 35%),
+        linear-gradient(145deg, #eef5fb, #fff);
+      border-left: 1px solid var(--line);
+    }
+
+    .person {
+      position: relative;
+      width: min(72%, 420px);
+      aspect-ratio: 1 / 1;
+    }
+
+    .person::before {
+      content: "";
+      position: absolute;
+      width: 22%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: #283747;
+      left: 39%;
+      top: 12%;
+    }
+
+    .person::after {
+      content: "";
+      position: absolute;
+      width: 72%;
+      height: 28%;
+      border-radius: 80px;
+      background: #283747;
+      left: 14%;
+      top: 40%;
+      transform: rotate(-9deg);
+    }
+
+    .pulse {
+      position: absolute;
+      inset: 16%;
+      border: 6px solid rgba(214, 64, 69, .28);
+      border-radius: 50%;
+      animation: pulse 1.4s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(.8); opacity: .9; }
+      100% { transform: scale(1.2); opacity: .05; }
+    }
+
+    .online-box {
+      display: grid;
+      gap: 12px;
+      border-left: 8px solid var(--blue);
+    }
+
+    .online-url {
+      word-break: break-all;
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+    .answer, .pill {
+      min-height: 74px;
+      padding: 16px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .answer.selected {
+      border-color: var(--blue);
+      background: #eaf4ff;
+    }
+
+    .answer.correct {
+      border-color: var(--green);
+      background: #eaf8f0;
+    }
+
+    .answer.wrong {
+      border-color: var(--red);
+      background: #fff0f0;
+    }
+
+    .feedback {
+      min-height: 80px;
+      color: var(--ink);
+      border-left: 6px solid var(--yellow);
+      background: #fff9e8;
+    }
+
+    .sort-item {
+      display: grid;
+      place-items: center;
+      min-height: 92px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: var(--white);
+      text-align: center;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .sort-item.active {
+      outline: 4px solid rgba(23, 105, 170, .2);
+      border-color: var(--blue);
+    }
+
+    .sequence {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .drop {
+      min-height: 112px;
+      border: 2px dashed #b8c7d3;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      padding: 10px;
+      color: var(--muted);
+      text-align: center;
+      background: #f9fbfd;
+    }
+
+    .drop.filled {
+      border-style: solid;
+      color: var(--ink);
+      background: #eef8f3;
+      font-weight: 800;
+    }
+
+    .meter-wrap {
+      display: grid;
+      gap: 18px;
+      justify-items: center;
+      align-content: center;
+    }
+
+    .compress-circle {
+      width: min(34vw, 270px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 16px solid #e1e8ef;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      transition: transform .08s linear, border-color .08s linear;
+    }
+
+    .compress-circle.beat {
+      transform: scale(.88);
+      border-color: var(--red);
+    }
+
+    .bpm {
+      font-size: clamp(46px, 6vw, 84px);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav-button {
+      min-width: 96px;
+      min-height: 42px;
+      padding: 8px 14px;
+      font-weight: 800;
+    }
+
+    .primary {
+      color: var(--white);
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .danger {
+      color: var(--white);
+      background: var(--red);
+      border-color: var(--red);
+    }
+
+    .sim-row {
+      display: grid;
+      grid-template-columns: 160px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--blue);
+    }
+
+    .outcome {
+      display: grid;
+      align-content: center;
+      min-height: 170px;
+      border-radius: 8px;
+      padding: 20px;
+      background: #eef5fb;
+      border: 1px solid #c9dced;
+    }
+
+    .outcome.good {
+      background: #e8f7ee;
+      border-color: #aedfc5;
+    }
+
+    .outcome.warn {
+      background: #fff7e3;
+      border-color: #f2d58f;
+    }
+
+    .outcome.bad {
+      background: #fff0f0;
+      border-color: #efb3b3;
+    }
+
+    .tally {
+      display: grid;
+      gap: 10px;
+    }
+
+    .tally-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .bar {
+      height: 24px;
+      border-radius: 999px;
+      background: #e7edf3;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: var(--red);
+      transition: width .2s ease;
+    }
+
+    .tally-button {
+      padding: 10px 12px;
+      font-weight: 800;
+    }
+
+    .role-board {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .role {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 150px;
+      background: var(--white);
+    }
+
+    .role strong {
+      display: block;
+      color: var(--blue);
+      font-size: clamp(19px, 1.7vw, 25px);
+      margin-bottom: 8px;
+    }
+
+    .timer {
+      font-size: clamp(44px, 6vw, 76px);
+      font-weight: 900;
+      color: var(--red);
+    }
+
+    .sources {
+      font-size: clamp(14px, 1.1vw, 17px);
+      color: var(--muted);
+      line-height: 1.45;
+      align-self: end;
+    }
+
+    footer {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 9px 16px;
+      background: #fff;
+      border-top: 1px solid var(--line);
+    }
+
+    .dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #c9d3dc;
+    }
+
+    .dot.active {
+      background: var(--red);
+    }
+
+    @media (max-width: 880px) {
+      body {
+        overflow: auto;
+        overflow-x: hidden;
+      }
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+      .brand, .live-link {
+        min-width: 0;
+      }
+      .live-link {
+        grid-template-columns: auto minmax(0, 1fr) 42px;
+      }
+      .live-link input {
+        font-size: 15px;
+      }
+      h1 {
+        font-size: clamp(30px, 9.4vw, 40px);
+        max-width: 100%;
+        word-break: break-all;
+      }
+      h2 {
+        font-size: clamp(28px, 8vw, 40px);
+        word-break: break-all;
+      }
+      p, li {
+        word-break: break-word;
+      }
+      main { padding: 10px; }
+      .stage {
+        aspect-ratio: auto;
+        width: 100%;
+        min-height: calc(100vh - 220px);
+        max-height: none;
+      }
+      .slide, .slide.two-col {
+        position: relative;
+        min-height: calc(100vh - 220px);
+        grid-template-columns: 1fr;
+        padding: 20px;
+      }
+      .slide:not(.active) { display: none; }
+      .grid.cols-2, .grid.cols-3, .grid.cols-5, .sequence, .role-board {
+        grid-template-columns: 1fr;
+      }
+      .sim-row {
+        grid-template-columns: 1fr;
+      }
+      footer {
+        grid-template-columns: 1fr;
+      }
+      .controls {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="heart">♥</span><span>CPR 宣導互動簡報</span></div>
+    <label class="live-link">
+      <span>線上互動</span>
+      <input id="liveUrl" type="url" placeholder="貼上 Slido / Mentimeter / Google Forms 連結">
+      <button class="icon-button" id="copyLive" title="複製互動連結">⧉</button>
+    </label>
+    <div id="counter">1 / 8</div>
+  </header>
+  <div class="progress"><span id="progress"></span></div>
+
+  <main>
+    <section class="stage" aria-live="polite">
+      <article class="slide active two-col" data-title="如果倒下的是你身邊的人">
+        <div>
+          <p class="kicker">情境啟動</p>
+          <h1>如果有人突然倒下，你敢不敢先做一件事？</h1>
+          <p class="lead">CPR 的第一個門檻不是技術，而是旁觀者願不願意開始行動。</p>
+          <div class="panel online-box">
+            <h3>即時線上互動 1</h3>
+            <p>請學生用手機進入互動連結，回答：「你最怕做錯哪一步？」</p>
+            <p class="online-url liveDisplay">尚未設定連結</p>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="倒地情境示意">
+          <div class="pulse"></div>
+          <div class="person"></div>
+        </div>
+      </article>
+
+      <article class="slide three-row" data-title="現場第一分鐘">
+        <div>
+          <p class="kicker">現場判斷</p>
+          <h2>第一分鐘的核心：確認、求援、開始壓</h2>
+          <p class="lead">投票後請看現場分布，討論大家最常卡住的原因。</p>
+        </div>
+        <div class="grid cols-2">
+          <div class="panel tally" data-tally="fear">
+            <h3>投影端快速統計</h3>
+            <div class="tally-row"><span>怕壓錯位置</span><button class="tally-button" data-vote="0">+1</button></div>
+            <div class="bar"><span></span></div>
+            <div class="tally-row"><span>怕弄傷病人</span><button class="tally-button" data-vote="1">+1</button></div>
+            <div class="bar"><span></span></div>
+            <div class="tally-row"><span>不知道何時叫 119</span><button class="tally-button" data-vote="2">+1</button></div>
+            <div class="bar"><span></span></div>
+            <div class="tally-row"><span>不知道 AED 怎麼用</span><button class="tally-button" data-vote="3">+1</button></div>
+            <div class="bar"><span></span></div>
+          </div>
+          <div class="panel feedback">
+            <h3>講師提示</h3>
+            <p>旁觀者 CPR 的目標是爭取時間。對成人突然倒下、無反應且沒有正常呼吸時，先呼叫 119、取得 AED，並開始高品質胸外按壓。</p>
+          </div>
+        </div>
+        <p class="sources">資料依據：台灣心臟學會 CPR 資訊、臺北市 119 CPR 示範、American Heart Association Hands-Only CPR、American Red Cross CPR steps。</p>
+      </article>
+
+      <article class="slide three-row" data-title="CPR 順序排序">
+        <div>
+          <p class="kicker">互動探索</p>
+          <h2>把成人倒地 CPR 的順序排出來</h2>
+          <p class="lead">先點下方步驟，再點 1 到 5 的空格。完成後檢查答案。</p>
+        </div>
+        <div class="grid">
+          <div class="grid cols-5" id="sortItems">
+            <button class="sort-item" data-step="safe">確認環境安全</button>
+            <button class="sort-item" data-step="response">確認反應與呼吸</button>
+            <button class="sort-item" data-step="call">請人打 119、拿 AED</button>
+            <button class="sort-item" data-step="compress">開始胸外按壓</button>
+            <button class="sort-item" data-step="aed">AED 到場立即使用</button>
+          </div>
+          <div class="sequence" id="sequence">
+            <button class="drop" data-slot="0">1</button>
+            <button class="drop" data-slot="1">2</button>
+            <button class="drop" data-slot="2">3</button>
+            <button class="drop" data-slot="3">4</button>
+            <button class="drop" data-slot="4">5</button>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="nav-button primary" id="checkSort">檢查順序</button>
+          <button class="nav-button" id="resetSort">重排</button>
+          <div class="panel feedback" id="sortFeedback">請先完成排序。</div>
+        </div>
+      </article>
+
+      <article class="slide two-col" data-title="按壓節奏練習">
+        <div>
+          <p class="kicker">節奏練習</p>
+          <h2>胸外按壓要像節拍器：100-120 下/分鐘</h2>
+          <p class="lead">按下開始後，全班跟著畫面節奏拍手或在模型上練習。請線上回報：「太慢、剛好、太快」。</p>
+          <div class="panel online-box">
+            <h3>即時線上互動 2</h3>
+            <p>學生用手機回覆自己跟拍的感覺，講師依回饋調整 BPM。</p>
+            <p class="online-url liveDisplay">尚未設定連結</p>
+          </div>
+        </div>
+        <div class="tool meter-wrap">
+          <div class="compress-circle" id="beatCircle"><span class="bpm" id="bpmText">110</span></div>
+          <input id="bpmSlider" type="range" min="90" max="130" value="110" aria-label="按壓速度">
+          <div class="controls">
+            <button class="nav-button primary" id="startBeat">開始</button>
+            <button class="nav-button" id="stopBeat">停止</button>
+            <button class="nav-button" id="targetBeat">設為 110</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide three-row" data-title="高品質 CPR 模擬器">
+        <div>
+          <p class="kicker">品質模擬</p>
+          <h2>不是有壓就好，是要壓得有效</h2>
+          <p class="lead">調整三個條件，觀察現場處置品質會如何改變。</p>
+        </div>
+        <div class="grid cols-2">
+          <div class="tool">
+            <div class="sim-row">
+              <strong>速度</strong>
+              <input id="rate" type="range" min="80" max="140" value="110">
+              <span id="rateValue">110 / 分</span>
+            </div>
+            <div class="sim-row">
+              <strong>深度</strong>
+              <input id="depth" type="range" min="3" max="7" value="5" step=".5">
+              <span id="depthValue">5 cm</span>
+            </div>
+            <div class="sim-row">
+              <strong>回彈</strong>
+              <input id="recoil" type="range" min="0" max="100" value="85">
+              <span id="recoilValue">85%</span>
+            </div>
+          </div>
+          <div class="outcome" id="qualityOutcome">
+            <h3>品質判讀</h3>
+            <p>目前接近高品質按壓：速度 100-120 / 分、成人深度約 5-6 cm、每次都讓胸部完全回彈。</p>
+          </div>
+        </div>
+        <div class="panel online-box">
+          <h3>即時線上互動 3</h3>
+          <p>請學生在線上送出：「哪一項最容易被忽略？」速度、深度、回彈、減少中斷。</p>
+        </div>
+      </article>
+
+      <article class="slide three-row" data-title="AED 迷思快問快答">
+        <div>
+          <p class="kicker">迷思釐清</p>
+          <h2>AED 到場後，先等專業人員嗎？</h2>
+          <p class="lead">請先在線上投票，再在投影端揭曉答案。</p>
+        </div>
+        <div class="grid cols-2">
+          <button class="answer" data-quiz="aed" data-correct="false">A. 等救護車到場，不要碰 AED</button>
+          <button class="answer" data-quiz="aed" data-correct="true">B. 打開 AED，照語音指示操作</button>
+          <button class="answer" data-quiz="aed" data-correct="false">C. 只要貼片就一定會電擊</button>
+          <button class="answer" data-quiz="aed" data-correct="false">D. AED 只能醫護人員使用</button>
+        </div>
+        <div class="panel feedback" id="aedFeedback">選一個答案。</div>
+      </article>
+
+      <article class="slide three-row" data-title="四人小組現場演練">
+        <div>
+          <p class="kicker">團隊演練</p>
+          <h2>四個角色，讓現場不混亂</h2>
+          <p class="lead">每組 90 秒：分工、喊出口令、完成第一輪處置。</p>
+        </div>
+        <div class="role-board">
+          <div class="role"><strong>壓胸者</strong><p>定位胸骨中央，持續壓胸，累了就換手。</p></div>
+          <div class="role"><strong>通報者</strong><p>打 119，說明地點、狀況、人數。</p></div>
+          <div class="role"><strong>AED 者</strong><p>找 AED、開機、貼片、聽指令。</p></div>
+          <div class="role"><strong>現場者</strong><p>維持安全、疏散、協助換手。</p></div>
+        </div>
+        <div class="controls">
+          <div class="timer" id="drillTimer">90</div>
+          <button class="nav-button primary" id="startDrill">開始演練</button>
+          <button class="nav-button" id="resetDrill">重設</button>
+          <div class="panel online-box">
+            <h3>即時線上互動 4</h3>
+            <p>演練後請各組線上回報：「最順的一步」和「最需要再練的一步」。</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide three-row" data-title="結尾挑戰">
+        <div>
+          <p class="kicker">整理輸出</p>
+          <h2>離開前，請完成 3 題行動確認</h2>
+          <p class="lead">每題點選答案，全部答完後看全班要帶走的三句話。</p>
+        </div>
+        <div class="grid cols-3">
+          <div class="panel">
+            <h3>1. 成人突然倒下、無正常呼吸，第一線民眾要？</h3>
+            <button class="answer mini" data-final="1" data-correct="true">叫 119、拿 AED、開始壓胸</button>
+            <button class="answer mini" data-final="1" data-correct="false">先等家屬確認</button>
+          </div>
+          <div class="panel">
+            <h3>2. 成人胸外按壓速度？</h3>
+            <button class="answer mini" data-final="2" data-correct="false">60-80 下/分鐘</button>
+            <button class="answer mini" data-final="2" data-correct="true">100-120 下/分鐘</button>
+          </div>
+          <div class="panel">
+            <h3>3. AED 的重點？</h3>
+            <button class="answer mini" data-final="3" data-correct="true">開機後跟著語音做</button>
+            <button class="answer mini" data-final="3" data-correct="false">一定會自動電擊</button>
+          </div>
+        </div>
+        <div class="panel feedback" id="finalFeedback">完成 3 題後，這裡會顯示結論。</div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="controls">
+      <button class="nav-button" id="prev">上一頁</button>
+      <button class="nav-button primary" id="next">下一頁</button>
+    </div>
+    <div class="dots" id="dots" aria-label="投影片進度"></div>
+    <div>鍵盤 ← → 可換頁</div>
+  </footer>
+
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    const progress = document.getElementById("progress");
+    const counter = document.getElementById("counter");
+    const dots = document.getElementById("dots");
+    let current = 0;
+
+    slides.forEach((_, index) => {
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dot.addEventListener("click", () => showSlide(index));
+      dots.appendChild(dot);
+    });
+
+    function showSlide(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, i) => slide.classList.toggle("active", i === current));
+      [...dots.children].forEach((dot, i) => dot.classList.toggle("active", i === current));
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+      document.title = `${slides[current].dataset.title} - CPR 宣導互動簡報`;
+    }
+
+    document.getElementById("prev").addEventListener("click", () => showSlide(current - 1));
+    document.getElementById("next").addEventListener("click", () => showSlide(current + 1));
+    document.addEventListener("keydown", event => {
+      if (event.key === "ArrowRight") showSlide(current + 1);
+      if (event.key === "ArrowLeft") showSlide(current - 1);
+    });
+
+    const liveUrl = document.getElementById("liveUrl");
+    const liveDisplays = [...document.querySelectorAll(".liveDisplay")];
+    liveUrl.addEventListener("input", () => {
+      const value = liveUrl.value.trim();
+      liveDisplays.forEach(el => {
+        el.textContent = value || "尚未設定連結";
+      });
+    });
+    document.getElementById("copyLive").addEventListener("click", async () => {
+      if (!liveUrl.value.trim()) return;
+      await navigator.clipboard.writeText(liveUrl.value.trim());
+    });
+
+    document.querySelectorAll("[data-tally]").forEach(panel => {
+      const counts = [0, 0, 0, 0];
+      const buttons = [...panel.querySelectorAll("[data-vote]")];
+      const bars = [...panel.querySelectorAll(".bar span")];
+      buttons.forEach(button => {
+        button.addEventListener("click", () => {
+          counts[Number(button.dataset.vote)]++;
+          const max = Math.max(1, ...counts);
+          bars.forEach((bar, i) => {
+            bar.style.width = `${(counts[i] / max) * 100}%`;
+          });
+          button.textContent = `+1 (${counts[Number(button.dataset.vote)]})`;
+        });
+      });
+    });
+
+    const order = ["safe", "response", "call", "compress", "aed"];
+    let selectedStep = null;
+    const itemLabels = new Map([...document.querySelectorAll(".sort-item")].map(el => [el.dataset.step, el.textContent]));
+    document.querySelectorAll(".sort-item").forEach(item => {
+      item.addEventListener("click", () => {
+        selectedStep = item.dataset.step;
+        document.querySelectorAll(".sort-item").forEach(el => el.classList.remove("active"));
+        item.classList.add("active");
+      });
+    });
+    document.querySelectorAll(".drop").forEach(drop => {
+      drop.addEventListener("click", () => {
+        if (!selectedStep) return;
+        drop.dataset.value = selectedStep;
+        drop.textContent = itemLabels.get(selectedStep);
+        drop.classList.add("filled");
+      });
+    });
+    document.getElementById("checkSort").addEventListener("click", () => {
+      const values = [...document.querySelectorAll(".drop")].map(drop => drop.dataset.value);
+      const done = values.every(Boolean);
+      const correct = values.every((value, i) => value === order[i]);
+      const feedback = document.getElementById("sortFeedback");
+      if (!done) feedback.textContent = "還有空格沒排完。";
+      else if (correct) feedback.textContent = "正確。重點是早期求援、早期 CPR、早期 AED。";
+      else feedback.textContent = "再調整一次：安全、反應呼吸、119/AED、壓胸、AED。";
+    });
+    document.getElementById("resetSort").addEventListener("click", () => {
+      document.querySelectorAll(".drop").forEach((drop, i) => {
+        drop.textContent = String(i + 1);
+        drop.dataset.value = "";
+        drop.classList.remove("filled");
+      });
+      document.querySelectorAll(".sort-item").forEach(el => el.classList.remove("active"));
+      selectedStep = null;
+      document.getElementById("sortFeedback").textContent = "請先完成排序。";
+    });
+
+    let beatTimer = null;
+    const bpmSlider = document.getElementById("bpmSlider");
+    const bpmText = document.getElementById("bpmText");
+    const beatCircle = document.getElementById("beatCircle");
+    function beat() {
+      beatCircle.classList.add("beat");
+      setTimeout(() => beatCircle.classList.remove("beat"), 120);
+    }
+    function startBeat() {
+      stopBeat();
+      beat();
+      beatTimer = setInterval(beat, 60000 / Number(bpmSlider.value));
+    }
+    function stopBeat() {
+      if (beatTimer) clearInterval(beatTimer);
+      beatTimer = null;
+      beatCircle.classList.remove("beat");
+    }
+    bpmSlider.addEventListener("input", () => {
+      bpmText.textContent = bpmSlider.value;
+      if (beatTimer) startBeat();
+    });
+    document.getElementById("startBeat").addEventListener("click", startBeat);
+    document.getElementById("stopBeat").addEventListener("click", stopBeat);
+    document.getElementById("targetBeat").addEventListener("click", () => {
+      bpmSlider.value = 110;
+      bpmText.textContent = "110";
+      if (beatTimer) startBeat();
+    });
+
+    const rate = document.getElementById("rate");
+    const depth = document.getElementById("depth");
+    const recoil = document.getElementById("recoil");
+    function updateQuality() {
+      const r = Number(rate.value);
+      const d = Number(depth.value);
+      const q = Number(recoil.value);
+      document.getElementById("rateValue").textContent = `${r} / 分`;
+      document.getElementById("depthValue").textContent = `${d} cm`;
+      document.getElementById("recoilValue").textContent = `${q}%`;
+      const outcome = document.getElementById("qualityOutcome");
+      outcome.className = "outcome";
+      if (r >= 100 && r <= 120 && d >= 5 && d <= 6 && q >= 80) {
+        outcome.classList.add("good");
+        outcome.innerHTML = "<h3>品質判讀</h3><p>接近高品質 CPR。維持速度、深度、回彈，並減少中斷。</p>";
+      } else if (r < 90 || r > 130 || d < 4 || d > 6.5 || q < 55) {
+        outcome.classList.add("bad");
+        outcome.innerHTML = "<h3>品質判讀</h3><p>效果可能明顯下降。請回到 100-120 / 分、成人約 5-6 cm，並讓胸部完全回彈。</p>";
+      } else {
+        outcome.classList.add("warn");
+        outcome.innerHTML = "<h3>品質判讀</h3><p>有一項接近邊界。現場請大聲提醒節奏、深度或回彈。</p>";
+      }
+    }
+    [rate, depth, recoil].forEach(input => input.addEventListener("input", updateQuality));
+    updateQuality();
+
+    document.querySelectorAll("[data-quiz='aed']").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-quiz='aed']").forEach(el => {
+          el.classList.remove("selected", "correct", "wrong");
+        });
+        const correct = button.dataset.correct === "true";
+        button.classList.add(correct ? "correct" : "wrong");
+        document.getElementById("aedFeedback").textContent = correct
+          ? "正確。AED 會分析心律，只有需要時才會建議電擊。"
+          : "再想一次。AED 到場應立即開機，跟著語音指示操作。";
+      });
+    });
+
+    let drillTimer = null;
+    let drillLeft = 90;
+    const drillDisplay = document.getElementById("drillTimer");
+    function renderDrill() {
+      drillDisplay.textContent = drillLeft;
+    }
+    document.getElementById("startDrill").addEventListener("click", () => {
+      if (drillTimer) return;
+      drillTimer = setInterval(() => {
+        drillLeft--;
+        renderDrill();
+        if (drillLeft <= 0) {
+          clearInterval(drillTimer);
+          drillTimer = null;
+        }
+      }, 1000);
+    });
+    document.getElementById("resetDrill").addEventListener("click", () => {
+      if (drillTimer) clearInterval(drillTimer);
+      drillTimer = null;
+      drillLeft = 90;
+      renderDrill();
+    });
+
+    const finalAnswers = new Map();
+    document.querySelectorAll("[data-final]").forEach(button => {
+      button.addEventListener("click", () => {
+        const question = button.dataset.final;
+        document.querySelectorAll(`[data-final='${question}']`).forEach(el => {
+          el.classList.remove("correct", "wrong");
+        });
+        const correct = button.dataset.correct === "true";
+        finalAnswers.set(question, correct);
+        button.classList.add(correct ? "correct" : "wrong");
+        const answered = finalAnswers.size;
+        const score = [...finalAnswers.values()].filter(Boolean).length;
+        const feedback = document.getElementById("finalFeedback");
+        if (answered < 3) {
+          feedback.textContent = `已完成 ${answered} / 3 題。`;
+        } else if (score === 3) {
+          feedback.textContent = "帶走三句話：敢開始、叫 119 拿 AED、用 100-120 / 分的節奏持續壓。";
+        } else {
+          feedback.textContent = `答對 ${score} / 3。請再確認：成人倒地無正常呼吸時，求援、壓胸、AED 要同時推進。`;
+        }
+      });
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>
